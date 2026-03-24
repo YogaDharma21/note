@@ -1,69 +1,69 @@
-# React + TypeScript + Vite
+# Starter Kit
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **polyglot monorepo** template for managing multiple independent projects in various languages and frameworks.
 
-Currently, two official plugins are available:
+## Philosophy
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **No shared code** - Each app is completely independent
+- **Each app lives alone** - Self-contained with own dependencies, build system, and configuration
+- **Language agnostic** - Use any framework or language per app
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```
+apps/           # All projects (web, mobile, desktop, backend, cli)
+├── web/        # Frontend applications
+├── mobile/     # Mobile applications
+├── desktop/    # Desktop applications
+├── backend/    # Backend services
+└── cli/        # Command-line tools
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+docker/         # Docker configurations
+docs/           # Architecture documentation
+scripts/        # Utility scripts
+.github/        # CI/CD workflows
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- [Node.js](https://nodejs.org/) (for JS/TS projects)
+- [Docker](https://www.docker.com/) (for containerization)
+- [Python](https://www.python.org/) (for Python projects)
+- [Go](https://go.dev/) (for Go projects)
+- [Rust](https://www.rust-lang.org/) (for Rust projects)
+
+### Creating a New App
+
+1. Navigate to the appropriate folder under `apps/`
+2. Initialize your project:
+
+```bash
+# Example: Creating a new web app
+cd apps/web
+npm create vite@latest my-app -- --template react
 ```
+
+3. Update the CI workflow in `.github/workflows/ci.yml` if needed
+
+### Running with Docker
+
+```bash
+# Start all services
+docker-compose -f docker/docker-compose.yml up
+
+# Start specific service
+docker-compose -f docker/docker-compose.yml up web
+```
+
+## CI/CD
+
+This repository uses GitHub Actions with path-based filtering:
+- Changes to `apps/web/**` trigger web app builds
+- Changes to `apps/backend/**` trigger backend builds
+- Each app category has its own job
+
+## License
+
+[MIT](LICENSE)
