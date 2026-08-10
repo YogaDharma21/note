@@ -1,0 +1,21 @@
+info:
+  name: Hello World
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/example/v1/hello-world"
+  body:
+    type: json
+    data: |-
+      {
+          "name":"yoga"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
