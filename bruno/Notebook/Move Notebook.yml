@@ -1,0 +1,21 @@
+info:
+  name: Move Notebook
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/notebook/v1/1ab72510-91cf-4dc9-9314-39a6f562f838/move"
+  body:
+    type: json
+    data: |-
+      {
+        "parent_id": "5bb5c4b7-3beb-4ca9-96cb-80e3be8dca67"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -10,8 +10,8 @@ http:
     type: json
     data: |-
       {
-        "name": "Tutorial Golang part 1",
-        "parent_id": "468b1e01-ccb7-4f6f-82e2-8d528da08525"
+        "name": "Tutorial Coding",
+        "parent_id": null
       }
   auth: inherit
 

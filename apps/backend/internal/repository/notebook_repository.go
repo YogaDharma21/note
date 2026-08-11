@@ -20,6 +20,7 @@ type INotebookRepository interface {
 	Update(ctx context.Context, notebook *entity.Notebook) error
 	DeleteById(ctx context.Context, id uuid.UUID) error
 	NullifyParentById(ctx context.Context, parentId uuid.UUID) error
+	UpdateParentId(ctx context.Context, id uuid.UUID, parentId *uuid.UUID) error
 }
 
 type notebookRepository struct {
@@ -95,6 +96,22 @@ func (n *notebookRepository) NullifyParentById(ctx context.Context, parentId uui
 		`UPDATE notebook SET parent_id = null, updated_at = $1 WHERE parent_id = $2`,
 		time.Now(),
 		parentId,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *notebookRepository) UpdateParentId(ctx context.Context, id uuid.UUID, parentId *uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`UPDATE notebook SET parent_id = $1, updated_at = $2 WHERE id = $3`,
+		parentId,
+		time.Now(),
+		id,
 	)
 
 	if err != nil {
