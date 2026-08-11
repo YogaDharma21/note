@@ -1,0 +1,15 @@
+info:
+  name: Show Notebook
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{base_url}}/api/notebook/v1/4d2059fc-7586-4be4-929d-174e2c2a580d"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
