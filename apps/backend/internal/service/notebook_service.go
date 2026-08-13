@@ -13,6 +13,7 @@ import (
 )
 
 type INotebookService interface {
+	GetAll(ctx context.Context) ([]*dto.GetAllNotebookResponse, error)
 	Create(ctx context.Context, req *dto.CreateNotebookRequest) (*dto.CreateNotebookResponse, error)
 	Show(ctx context.Context, id uuid.UUID) (*dto.ShowNotebookResponse, error)
 	Update(ctx context.Context, req *dto.UpdateNotebookRequest) (*dto.UpdateNotebookResponse, error)
@@ -49,6 +50,27 @@ func (c *notebookService) Create(ctx context.Context, req *dto.CreateNotebookReq
 	return &dto.CreateNotebookResponse{
 		Id: notebook.Id,
 	}, nil
+}
+
+func (c *notebookService) GetAll(ctx context.Context) ([]*dto.GetAllNotebookResponse, error) {
+	notebooks, err := c.notebookRepository.GetAll(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*dto.GetAllNotebookResponse, 0)
+	for _, notebook := range notebooks {
+		res := dto.GetAllNotebookResponse{
+			Id:        notebook.Id,
+			Name:      notebook.Name,
+			ParentId:  notebook.ParentId,
+			CreatedAt: notebook.CreatedAt,
+			UpdatedAt: notebook.UpdatedAt,
+		}
+		result = append(result, &res)
+	}
+
+	return result, nil
 }
 
 func (c *notebookService) Show(ctx context.Context, id uuid.UUID) (*dto.ShowNotebookResponse, error) {

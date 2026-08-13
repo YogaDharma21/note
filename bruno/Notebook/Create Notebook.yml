@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "name": "Tutorial Coding",
+        "name": "Tutorial Coding express part 2",
         "parent_id": null
       }
   auth: inherit

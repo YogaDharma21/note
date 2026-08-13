@@ -15,6 +15,7 @@ import (
 
 type INotebookRepository interface {
 	UsingTx(ctx context.Context, tx database.DatabaseQueryer) INotebookRepository
+	GetAll(ctx context.Context) ([]*entity.Notebook, error)
 	Create(ctx context.Context, notebook *entity.Notebook) error
 	GetById(ctx context.Context, id uuid.UUID) (*entity.Notebook, error)
 	Update(ctx context.Context, notebook *entity.Notebook) error
@@ -51,6 +52,33 @@ func (n *notebookRepository) Create(ctx context.Context, notebook *entity.Notebo
 	}
 
 	return nil
+}
+
+func (n *notebookRepository) GetAll(ctx context.Context) ([]*entity.Notebook, error) {
+	rows, err := n.db.Query(
+		ctx,
+		`SELECT id,name,parent_id,created_at,updated_at FROM notebook WHERE is_deleted = false ORDER BY name ASC`,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]*entity.Notebook, 0)
+	for rows.Next() {
+		var notebook entity.Notebook
+		err = rows.Scan(
+			&notebook.Id,
+			&notebook.Name,
+			&notebook.ParentId,
+			&notebook.CreatedAt,
+			&notebook.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, &notebook)
+	}
+	return result, nil
 }
 
 func (n *notebookRepository) Update(ctx context.Context, notebook *entity.Notebook) error {
