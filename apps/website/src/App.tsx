@@ -43,9 +43,9 @@ export default function App() {
     const currentNote = notes.find((note) => note.id === selectedNote);
 
     const fetchAllNotebook = async () => {
-        const data = await axios.get<
-            BaseResponse<GetAllNotebookResponse[]>
-        >(`${AppConfig.baseUrl}/api/notebook/v1`);
+        const data = await axios.get<BaseResponse<GetAllNotebookResponse[]>>(
+            `${AppConfig.baseUrl}/api/notebook/v1`,
+        );
         setNotebooks(
             data.data.data.map((notebook) => ({
                 id: notebook.id,
@@ -58,7 +58,7 @@ export default function App() {
     };
     useEffect(() => {
         fetchAllNotebook();
-    },[]);
+    }, []);
 
     const handleNoteUpdate = (noteId: string, updates: Partial<Note>) => {
         setNotes((prev) =>
@@ -74,13 +74,7 @@ export default function App() {
         notebookId: string,
         updates: Partial<Notebook>,
     ) => {
-        setNotebooks((prev) =>
-            prev.map((notebook) =>
-                notebook.id === notebookId
-                    ? { ...notebook, ...updates, updatedAt: new Date() }
-                    : notebook,
-            ),
-        );
+        fetchAllNotebook();
     };
 
     const handleDeleteNotebook = async (notebookId: string) => {
@@ -244,7 +238,7 @@ export default function App() {
             request,
         );
 
-        fetchAllNotebook()
+        fetchAllNotebook();
 
         // Auto-expand parent notebook when adding a child notebook
         if (selectedNotebook) {
