@@ -82,29 +82,14 @@ export default function App() {
 
         setIsDeletingNotebook(notebookId); // Set loading for this specific notebook
 
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        // Delete all notes in this notebook and its children
-        const notebookIdsToDelete = getAllChildNotebooks(notebookId);
-        setNotes((prev) =>
-            prev.filter(
-                (note) => !notebookIdsToDelete.includes(note.notebookId),
-            ),
+        await axios.delete(
+            `${AppConfig.baseUrl}/api/notebook/v1/${notebookId}`,
         );
 
-        // Delete the notebook and its children
-        setNotebooks((prev) =>
-            prev.filter(
-                (notebook) => !notebookIdsToDelete.includes(notebook.id),
-            ),
-        );
+        await fetchAllNotebook();
 
         // Clear selection if deleted
-        if (
-            selectedNotebook === notebookId ||
-            notebookIdsToDelete.includes(selectedNotebook || "")
-        ) {
+        if (selectedNotebook === notebookId) {
             setSelectedNotebook(null);
             setSelectedNote(null);
         }
