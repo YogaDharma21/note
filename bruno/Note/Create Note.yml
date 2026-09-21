@@ -22,3 +22,38 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+examples:
+  - name: success
+    request:
+      url: "{{base_url}}/api/note/v1/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "title": "coba note",
+            "content": "tapi isi content",
+            "notebook_id": "feba0612-7f33-405f-b05e-5ac0cb9792cf"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: date
+          value: Mon, 21 Sep 2026 03:41:08 GMT
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "112"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "code": 200,
+            "message": "Success Create Note",
+            "data": {
+              "id": "f78134d5-105a-4442-b661-37cd1902420a"
+            }
+          }
