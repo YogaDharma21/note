@@ -1,18 +1,11 @@
 info:
-  name: Update Note
+  name: Delete Note
   type: http
-  seq: 3
+  seq: 4
 
 http:
-  method: PUT
+  method: DELETE
   url: "{{base_url}}/api/note/v1/f78134d5-105a-4442-b661-37cd1902420a"
-  body:
-    type: json
-    data: |-
-      {
-        "title": "test update 3",
-        "content": "test update 3"
-      }
   auth: inherit
 
 settings:
@@ -26,32 +19,22 @@ examples:
   - name: success
     request:
       url: "{{base_url}}/api/note/v1/f78134d5-105a-4442-b661-37cd1902420a"
-      method: PUT
-      body:
-        type: json
-        data: |-
-          {
-            "title": "test update 3",
-            "content": "test update 3"
-          }
+      method: DELETE
     response:
       status: 200
       statusText: OK
       headers:
         - name: date
-          value: Mon, 21 Sep 2026 04:36:09 GMT
+          value: Mon, 21 Sep 2026 04:48:22 GMT
         - name: content-type
           value: application/json
         - name: content-length
-          value: "112"
+          value: "59"
       body:
         type: json
         data: |-
           {
             "success": true,
             "code": 200,
-            "message": "Success Update Note",
-            "data": {
-              "id": "f78134d5-105a-4442-b661-37cd1902420a"
-            }
+            "message": "Success Delete Note"
           }
