@@ -19,3 +19,37 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+examples:
+  - name: success
+    request:
+      url: "{{base_url}}/api/example/v1/hello-world"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+              "name":"yoga"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: date
+          value: Mon, 21 Sep 2026 04:24:41 GMT
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "79"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "code": 200,
+            "message": "Success",
+            "data": {
+              "message": "Hello yoga"
+            }
+          }

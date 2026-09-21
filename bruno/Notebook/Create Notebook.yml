@@ -21,3 +21,37 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+examples:
+  - name: success
+    request:
+      url: "{{base_url}}/api/notebook/v1/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Tutorial Coding express part 2",
+            "parent_id": null
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: date
+          value: Mon, 21 Sep 2026 04:23:54 GMT
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "116"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "code": 200,
+            "message": "Success Create Notebook",
+            "data": {
+              "id": "d4dbf99e-f91c-4fa5-a941-23815f9a4c1d"
+            }
+          }

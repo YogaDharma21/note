@@ -1,0 +1,23 @@
+info:
+  name: Update Note
+  type: http
+  seq: 3
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/note/v1/f78134d5-105a-4442-b661-37cd1902420a"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "test update 3",
+        "content": "test update 3"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
