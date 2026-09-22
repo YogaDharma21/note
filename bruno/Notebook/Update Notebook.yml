@@ -5,7 +5,7 @@ info:
 
 http:
   method: PUT
-  url: "{{base_url}}/api/notebook/v1/4d2059fc-7586-4be4-929d-174e2c2a580d"
+  url: "{{base_url}}/api/notebook/v1/d4dbf99e-f91c-4fa5-a941-23815f9a4c1d"
   body:
     type: json
     data: |-
@@ -19,3 +19,37 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+examples:
+  - name: success
+    request:
+      url: "{{base_url}}/api/notebook/v1/d4dbf99e-f91c-4fa5-a941-23815f9a4c1d"
+      method: PUT
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Tutorial Golang part 2"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: date
+          value: Tue, 22 Sep 2026 06:01:02 GMT
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "116"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "code": 200,
+            "message": "Success Update Notebook",
+            "data": {
+              "id": "d4dbf99e-f91c-4fa5-a941-23815f9a4c1d"
+            }
+          }

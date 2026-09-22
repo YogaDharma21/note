@@ -14,3 +14,27 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+examples:
+  - name: success
+    request:
+      url: "{{base_url}}/api/notebook/v1/9bbe3ec1-96a6-4b86-8595-151ed4e10fec"
+      method: DELETE
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: date
+          value: Tue, 22 Sep 2026 05:59:01 GMT
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "63"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "code": 200,
+            "message": "Success Delete Notebook"
+          }

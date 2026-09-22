@@ -5,12 +5,12 @@ info:
 
 http:
   method: PUT
-  url: "{{base_url}}/api/notebook/v1/1ab72510-91cf-4dc9-9314-39a6f562f838/move"
+  url: "{{base_url}}/api/notebook/v1/53369f0a-3ff7-405a-b4ec-477294f4d142"
   body:
     type: json
     data: |-
       {
-        "parent_id": "5bb5c4b7-3beb-4ca9-96cb-80e3be8dca67"
+        "parent_id": "feba0612-7f33-405f-b05e-5ac0cb9792cf"
       }
   auth: inherit
 
@@ -19,3 +19,37 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+examples:
+  - name: success
+    request:
+      url: "{{base_url}}/api/notebook/v1/53369f0a-3ff7-405a-b4ec-477294f4d142"
+      method: PUT
+      body:
+        type: json
+        data: |-
+          {
+            "parent_id": "feba0612-7f33-405f-b05e-5ac0cb9792cf"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: date
+          value: Tue, 22 Sep 2026 06:43:18 GMT
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "116"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "code": 200,
+            "message": "Success Update Notebook",
+            "data": {
+              "id": "53369f0a-3ff7-405a-b4ec-477294f4d142"
+            }
+          }
