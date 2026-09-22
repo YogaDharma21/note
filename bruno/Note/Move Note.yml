@@ -1,0 +1,55 @@
+info:
+  name: Move Note
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/note/v1/9cbd052e-739b-446f-a6a2-f95a5c18b624/move"
+  body:
+    type: json
+    data: |-
+      {
+        "notebook_id": "d4dbf99e-f91c-4fa5-a941-23815f9a4c1d"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+examples:
+  - name: success
+    request:
+      url: "{{base_url}}/api/note/v1/9cbd052e-739b-446f-a6a2-f95a5c18b624/move"
+      method: PUT
+      body:
+        type: json
+        data: |-
+          {
+            "notebook_id": "d4dbf99e-f91c-4fa5-a941-23815f9a4c1d"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: date
+          value: Tue, 22 Sep 2026 03:28:35 GMT
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "110"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "code": 200,
+            "message": "Success Move Note",
+            "data": {
+              "id": "9cbd052e-739b-446f-a6a2-f95a5c18b624"
+            }
+          }

@@ -82,10 +82,11 @@ func (n *noteRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.Not
 func (n *noteRepository) Update(ctx context.Context, note *entity.Note) error {
 	_, err := n.db.Exec(
 		ctx,
-		`UPDATE note SET title = $2, content = $3, updated_at = $4 WHERE id = $1 AND is_deleted = false`,
+		`UPDATE note SET title = $2, content = $3, notebook_id = $4 ,updated_at = $5 WHERE id = $1 AND is_deleted = false`,
 		note.Id,
 		note.Title,
 		note.Content,
+		note.NotebookId,
 		note.UpdatedAt,
 	)
 
