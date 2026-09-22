@@ -10,9 +10,9 @@ http:
     type: json
     data: |-
       {
-        "title": "coba note",
-        "content": "tapi isi content",
-        "notebook_id": "feba0612-7f33-405f-b05e-5ac0cb9792cf"
+        "title": "note 5 title",
+        "content": "note 5 desc",
+        "notebook_id": "9bbe3ec1-96a6-4b86-8595-151ed4e10fec"
       }
   auth: inherit
 

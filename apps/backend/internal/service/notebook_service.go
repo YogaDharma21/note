@@ -23,12 +23,14 @@ type INotebookService interface {
 
 type notebookService struct {
 	notebookRepository repository.INotebookRepository
+	noteRepository     repository.INoteRepository
 	db                 *pgxpool.Pool
 }
 
-func NewNotebookService(notebookRepository repository.INotebookRepository, db *pgxpool.Pool) INotebookService {
+func NewNotebookService(notebookRepository repository.INotebookRepository, noteRepository repository.INoteRepository, db *pgxpool.Pool) INotebookService {
 	return &notebookService{
 		notebookRepository: notebookRepository,
+		noteRepository:     noteRepository,
 		db:                 db,
 	}
 }
@@ -127,6 +129,7 @@ func (c *notebookService) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 	defer tx.Rollback(ctx)
 	notebookRepo := c.notebookRepository.UsingTx(ctx, tx)
+	noteRepo := c.noteRepository.UsingTx(ctx, tx)
 
 	err = notebookRepo.DeleteById(ctx, id)
 
@@ -135,6 +138,11 @@ func (c *notebookService) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 
 	err = notebookRepo.NullifyParentById(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = noteRepo.DeleteByNotebookId(ctx, id)
 	if err != nil {
 		return err
 	}
