@@ -9,7 +9,6 @@ import { Button } from "./components/ui/button";
 import { Search, MessageSquare, Plus, FolderPlus, XCircle } from "lucide-react"; // Import XCircle for clear button
 import type { Note } from "./types/note";
 import type { Notebook } from "./types/notebook";
-import { mockNotes } from "./lib/mock-data";
 import "./App.css";
 import axios from "axios";
 import type { BaseResponse } from "./dto/base-response";
@@ -21,10 +20,18 @@ import type {
     MoveNotebookResponse,
 } from "./dto/notebook";
 import { AppConfig } from "./config/config";
+import type {
+    CreateNoteRequest,
+    CreateNoteResponse,
+    MoveNoteRequest,
+    MoveNoteResponse,
+    UpdateNoteRequest,
+    UpdateNoteResponse,
+} from "./dto/note";
 
 export default function App() {
     const [notebooks, setNotebooks] = useState<Notebook[]>([]);
-    const [notes, setNotes] = useState<Note[]>(mockNotes);
+    const [notes, setNotes] = useState<Note[]>([]);
     const [selectedNotebook, setSelectedNotebook] = useState<string | null>(
         null,
     );
@@ -57,12 +64,33 @@ export default function App() {
                 updatedAt: notebook.updated_at ?? notebook.created_at,
             })),
         );
+        const fetchedNotes = data.data.data.flatMap((notebook) =>
+            notebook.notes.map<Note>((n) => ({
+                id: n.id,
+                title: n.title,
+                content: n.content,
+                notebookId: notebook.id,
+                createdAt: new Date(n.created_at),
+                updatedAt: new Date(n.updated_at ?? n.created_at),
+            })),
+        );
+        setNotes(fetchedNotes);
     };
     useEffect(() => {
         fetchAllNotebook();
     }, []);
 
-    const handleNoteUpdate = (noteId: string, updates: Partial<Note>) => {
+    const handleNoteUpdate = async (noteId: string, updates: Partial<Note>) => {
+        const note = notes.find((item) => item.id === noteId);
+        if (!note) return;
+        const request: UpdateNoteRequest = {
+            title: updates.title ?? note.title,
+            content: updates.content ?? note.content,
+        };
+        await axios.put<BaseResponse<UpdateNoteResponse>>(
+            `${AppConfig.baseUrl}/api/note/v1/${noteId}`,
+            request,
+        );
         setNotes((prev) =>
             prev.map((note) =>
                 note.id === noteId
@@ -104,17 +132,13 @@ export default function App() {
 
         setIsDeletingNote(noteId); // Set loading for this specific note
 
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        setNotes((prev) => prev.filter((note) => note.id !== noteId));
-
-        // Clear selection if deleted
-        if (selectedNote === noteId) {
-            setSelectedNote(null);
+        try {
+            await axios.delete(`${AppConfig.baseUrl}/api/note/v1/${noteId}`);
+            setNotes((prev) => prev.filter((note) => note.id !== noteId));
+            if (selectedNote === noteId) setSelectedNote(null);
+        } finally {
+            setIsDeletingNote(null);
         }
-
-        setIsDeletingNote(null); // Clear loading
     };
 
     const getAllChildNotebooks = (parentId: string): string[] => {
@@ -130,23 +154,23 @@ export default function App() {
 
     const handleMoveNote = async (noteId: string, targetNotebookId: string) => {
         setIsProcessingMove(true); // Start global loading for move
-        await new Promise((resolve) => setTimeout(resolve, 800)); // Dummy delay
-
-        setNotes((prev) =>
-            prev.map((note) =>
-                note.id === noteId
-                    ? {
-                          ...note,
-                          notebookId: targetNotebookId,
-                          updatedAt: new Date(),
-                      }
-                    : note,
-            ),
-        );
-
-        // Auto-expand target notebook
-        setExpandedNotebooks((prev) => new Set([...prev, targetNotebookId]));
-        setIsProcessingMove(false); // End global loading
+        try {
+            const request: MoveNoteRequest = { notebook_id: targetNotebookId };
+            await axios.put<BaseResponse<MoveNoteResponse>>(
+                `${AppConfig.baseUrl}/api/note/v1/${noteId}/move`,
+                request,
+            );
+            setNotes((prev) =>
+                prev.map((note) =>
+                    note.id === noteId
+                        ? { ...note, notebookId: targetNotebookId, updatedAt: new Date() }
+                        : note,
+                ),
+            );
+            setExpandedNotebooks((prev) => new Set([...prev, targetNotebookId]));
+        } finally {
+            setIsProcessingMove(false);
+        }
     };
 
     const handleMoveNotebook = async (
@@ -183,25 +207,22 @@ export default function App() {
 
         setIsCreatingNote(true);
 
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        const newNote: Note = {
-            id: `note-${Date.now()}`,
-            title: "Untitled Note",
-            content: "# Untitled Note\n\nStart writing...",
-            notebookId: selectedNotebook,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        setNotes((prev) => [...prev, newNote]);
-        setSelectedNote(newNote.id);
-
-        // Auto-expand the notebook when adding a note
-        setExpandedNotebooks((prev) => new Set([...prev, selectedNotebook]));
-
-        setIsCreatingNote(false);
+        try {
+            const request: CreateNoteRequest = {
+                title: "Untitled Note",
+                content: "# Untitled Note\n\nStart writing...",
+                notebook_id: selectedNotebook,
+            };
+            const response = await axios.post<BaseResponse<CreateNoteResponse>>(
+                `${AppConfig.baseUrl}/api/note/v1`,
+                request,
+            );
+            await fetchAllNotebook();
+            setSelectedNote(response.data.data.id);
+            setExpandedNotebooks((prev) => new Set([...prev, selectedNotebook]));
+        } finally {
+            setIsCreatingNote(false);
+        }
     };
 
     const handleCreateNotebook = async () => {

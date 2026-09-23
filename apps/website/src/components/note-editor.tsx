@@ -12,7 +12,7 @@ import { formatUpdatedAt } from "../lib/date"
 
 interface NoteEditorProps {
     note: Note
-    onUpdate: (noteId: string, updates: Partial<Note>) => void
+    onUpdate: (noteId: string, updates: Partial<Note>) => Promise<void>
 }
 
 export function NoteEditor({ note, onUpdate }: NoteEditorProps) {
@@ -31,9 +31,17 @@ export function NoteEditor({ note, onUpdate }: NoteEditorProps) {
         setHasChanges(content !== note.content || title !== note.title)
     }, [content, title, note.content, note.title])
 
-    const handleSave = () => {
-        onUpdate(note.id, { content, title })
-        setHasChanges(false)
+    const [isSaving, setIsSaving] = useState(false)
+
+    const handleSave = async () => {
+        if (isSaving) return
+        setIsSaving(true)
+        try {
+            await onUpdate(note.id, { content, title })
+            setHasChanges(false)
+        } finally {
+            setIsSaving(false)
+        }
     }
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -56,9 +64,9 @@ export function NoteEditor({ note, onUpdate }: NoteEditorProps) {
                     />
                     <div className="flex items-center gap-2">
                         {hasChanges && (
-                            <Button variant="outline" size="sm" onClick={handleSave} className="h-8 bg-transparent">
+                            <Button variant="outline" size="sm" onClick={handleSave} disabled={isSaving} className="h-8 bg-transparent">
                                 <Save className="h-4 w-4 mr-2" />
-                                Save
+                                {isSaving ? "Saving..." : "Save"}
                             </Button>
                         )}
                         <Button variant="outline" size="sm" onClick={() => setIsPreview(!isPreview)} className="h-8">
