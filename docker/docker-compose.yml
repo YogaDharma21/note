@@ -3,8 +3,8 @@ version: '3.8'
 services:
   # Add services from apps here
   # Example:
-  # web:
-  #   build: ./apps/web
+  # website:
+  #   build: ./apps/website
   #   ports:
   #     - "3000:3000"
   #

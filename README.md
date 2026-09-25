@@ -11,8 +11,8 @@ A **polyglot monorepo** template for managing multiple independent projects in v
 ## Project Structure
 
 ```
-apps/           # All projects (web, mobile, desktop, backend, cli)
-├── web/        # Frontend applications
+apps/           # All projects (website, mobile, desktop, backend, cli)
+├── website/    # Frontend application
 ├── mobile/     # Mobile applications
 ├── desktop/    # Desktop applications
 ├── backend/    # Backend services
@@ -28,7 +28,8 @@ scripts/        # Utility scripts
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (for JS/TS projects)
+- [Node.js](https://nodejs.org/) 20.19 or newer (for JS/TS projects)
+- [pnpm](https://pnpm.io/) 10 (for JS/TS projects)
 - [Docker](https://www.docker.com/) (for containerization)
 - [Python](https://www.python.org/) (for Python projects)
 - [Go](https://go.dev/) (for Go projects)
@@ -40,9 +41,9 @@ scripts/        # Utility scripts
 2. Initialize your project:
 
 ```bash
-# Example: Creating a new web app
-cd apps/web
-npm create vite@latest my-app -- --template react
+# Example: Creating a new React app
+cd apps/website
+pnpm create vite@latest my-app --template react
 ```
 
 3. Update the CI workflow in `.github/workflows/ci.yml` if needed
@@ -54,13 +55,13 @@ npm create vite@latest my-app -- --template react
 docker-compose -f docker/docker-compose.yml up
 
 # Start specific service
-docker-compose -f docker/docker-compose.yml up web
+docker-compose -f docker/docker-compose.yml up website
 ```
 
 ## CI/CD
 
 This repository uses GitHub Actions with path-based filtering:
-- Changes to `apps/web/**` trigger web app builds
+- Changes to `apps/website/**` trigger website builds
 - Changes to `apps/backend/**` trigger backend builds
 - Each app category has its own job
 

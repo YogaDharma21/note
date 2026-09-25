@@ -22,14 +22,14 @@ Each app in `/apps` is completely independent:
 
 ### Each App Lives Alone
 Every project in `/apps/*` is self-contained:
-- Own package manager (npm, pip, cargo, go mod, etc.)
+- Own package manager (pnpm, pip, cargo, go mod, etc.)
 - Own dependencies
 - Own build system
 - Own configuration files
 
 ### Language Freedom
 Apps can use any language/framework:
-- `/apps/web` - React, Vue, Svelte, Next.js, Nuxt, etc.
+- `/apps/website` - React, Vue, Svelte, Next.js, Nuxt, etc.
 - `/apps/mobile` - React Native, Flutter, Swift, Kotlin, etc.
 - `/apps/desktop` - Electron, Tauri, Qt, etc.
 - `/apps/backend` - Express, FastAPI, Go, Rust, etc.
@@ -45,7 +45,7 @@ Apps can use any language/framework:
 ## CI/CD
 
 The monorepo uses path-based filtering to run only relevant jobs:
-- Changes to `apps/web/**` trigger the web build
+- Changes to `apps/website/**` trigger the website build
 - Changes to `apps/backend/**` trigger the backend build
 - etc.
 

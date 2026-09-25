@@ -32,9 +32,9 @@ Example:
 
 ```yaml
 services:
-  web:
-    build: 
-      context: ../apps/web
+  website:
+    build:
+      context: ../apps/website
       dockerfile: Dockerfile
     ports:
       - "3000:3000"

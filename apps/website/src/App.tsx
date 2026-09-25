@@ -100,10 +100,7 @@ export default function App() {
         );
     };
 
-    const handleNotebookUpdate = (
-        notebookId: string,
-        updates: Partial<Notebook>,
-    ) => {
+    const handleNotebookUpdate = () => {
         fetchAllNotebook();
     };
 

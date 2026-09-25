@@ -71,10 +71,6 @@ export function Sidebar({
 }: SidebarProps) {
     const [editingNotebook, setEditingNotebook] = useState<string | null>(null);
     const [editingName, setEditingName] = useState("");
-    const [draggedItem, setDraggedItem] = useState<{
-        type: "notebook" | "note";
-        id: string;
-    } | null>(null);
     const [dragOverItem, setDragOverItem] = useState<{
         type: "notebook" | "note";
         id: string;
@@ -140,7 +136,6 @@ export function Sidebar({
             return;
         }
         e.stopPropagation();
-        setDraggedItem({ type, id });
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/plain", `${type}:${id}`); // Set data for cross-browser compatibility
     };
@@ -190,7 +185,6 @@ export function Sidebar({
             }
         }
 
-        setDraggedItem(null);
         setDragOverItem(null);
     };
 
@@ -211,7 +205,6 @@ export function Sidebar({
             onMoveNotebook(draggedId, null);
         }
 
-        setDraggedItem(null);
         setDragOverItem(null);
     };
 
